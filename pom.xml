@@ -1582,6 +1582,7 @@
             <configuration>
               <reportsDirectory>${project.basedir}/../target/surefire-reports
               </reportsDirectory>
+              <redirectTestOutputToFile>true</redirectTestOutputToFile>
               <excludes>
                 <exclude>**/IT*.java</exclude>
                 <exclude>org.apache.kylin.engine.spark2.NManualBuildAndQueryCuboidTest</exclude>
