@@ -1601,7 +1601,7 @@
                 </property>
               </systemProperties>
               <argLine>-javaagent:${project.build.testOutputDirectory}/jamm.jar
-                ${argLine} ${surefireArgLine}
+                ${argLine}
               </argLine>
             </configuration>
           </plugin>
