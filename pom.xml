@@ -1582,6 +1582,7 @@
             <configuration>
               <reportsDirectory>${project.basedir}/../target/surefire-reports
               </reportsDirectory>
+              <redirectTestOutputToFile>true</redirectTestOutputToFile>
               <excludes>
                 <exclude>**/IT*.java</exclude>
                 <exclude>org.apache.kylin.engine.spark2.NManualBuildAndQueryCuboidTest</exclude>
@@ -1601,7 +1602,7 @@
                 </property>
               </systemProperties>
               <argLine>-javaagent:${project.build.testOutputDirectory}/jamm.jar
-                ${argLine} ${surefireArgLine}
+                ${argLine}
               </argLine>
             </configuration>
           </plugin>
