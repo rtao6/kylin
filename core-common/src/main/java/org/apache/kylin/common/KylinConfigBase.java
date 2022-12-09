@@ -22,16 +22,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Properties;
-import java.util.SortedSet;
-import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -180,6 +172,20 @@ public abstract class KylinConfigBase implements Serializable {
     protected String getOptional(String prop, String dft) {
 
         final String property = System.getProperty(prop);
+        /*
+         * begin ctest
+         * */
+        String res;
+        if(property != null){
+            res = getSubstitutor().replace(property, System.getenv());
+            logger.warn("[CTEST][GET-PARAM] " + prop);//ctest
+        }else{
+            res = getSubstitutor().replace(properties.getProperty(prop, dft), System.getenv());
+            logger.warn("[CTEST][GET-PARAM] " + prop);//ctest
+        }
+        /*
+         * end ctest
+         * */
         return property != null ? getSubstitutor().replace(property, System.getenv())
                 : getSubstitutor().replace(properties.getProperty(prop, dft), System.getenv());
     }
@@ -201,6 +207,21 @@ public abstract class KylinConfigBase implements Serializable {
                 filteredProperties.put(entry.getKey(), sub.replace((String) entry.getValue()));
             }
         }
+        /**
+         * get properties for ctest
+         */
+        if (propertyKeys != null) {
+            Set<String> names = filteredProperties.stringPropertyNames();
+            Iterator<String> namesIterator = names.iterator();
+            int i = 0; //ctest
+            while (namesIterator.hasNext()){
+                logger.warn("[CTEST][GET-PARAM] " + namesIterator.next());
+                i ++;
+            }
+        }
+        /**
+         * end ctest
+         */
         return filteredProperties;
     }
 
@@ -222,6 +243,7 @@ public abstract class KylinConfigBase implements Serializable {
         for (Entry<Object, Object> entry : getAllProperties().entrySet()) {
             String key = (String) entry.getKey();
             if (key.startsWith(prefix)) {
+                logger.warn("[CTEST][GET-PARAM] " + key);//ctest
                 result.put(key.substring(prefix.length()), (String) entry.getValue());
             }
         }
@@ -258,7 +280,7 @@ public abstract class KylinConfigBase implements Serializable {
      * Use with care, properties should be read-only. This is for testing only.
      */
     final public void setProperty(String key, String value) {
-        logger.info("Kylin Config was updated with {} : {}", key, value);
+        logger.warn("[CTEST][SET-PARAM] {} {}", key, value);// Ctest
         properties.setProperty(BCC.check(key), value);
     }
 
